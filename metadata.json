@@ -1,0 +1,6 @@
+{
+  "name": "PDF-to-JSON Crew Standard Extractor",
+  "description": "High-performance tabular RSMeans construction crew extractor with Zig backend parser, JSON schema visualizer, and TypeScript frontend.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
