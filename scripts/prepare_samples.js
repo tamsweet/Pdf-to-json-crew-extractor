@@ -205,30 +205,47 @@ async function main() {
     console.error('Failed to run Zig extractor:', err);
   }
 
-  // Create clean formatted PDF
+  // Create clean formatted two-column PDF with all 21 crews
   const pdfDoc = await PDFDocument.create();
   const font = await pdfDoc.embedFont(StandardFonts.Courier);
   const boldFont = await pdfDoc.embedFont(StandardFonts.CourierBold);
 
   const page = pdfDoc.addPage([612, 792]);
   const lines = page1Text.split('\n');
-  let y = 760;
-  for (const line of lines) {
+  const col2Index = lines.findIndex((l, i) => i > 0 && l.startsWith('Crew A-2'));
+  const col1Lines = lines.slice(0, col2Index);
+  const col2Lines = lines.slice(col2Index);
+
+  let y1 = 760;
+  for (const line of col1Lines) {
     const isCrew = line.startsWith('Crew ');
     page.drawText(line, {
       x: 36,
-      y,
-      size: isCrew ? 8.5 : 7,
+      y: y1,
+      size: isCrew ? 7.5 : 6,
       font: isCrew ? boldFont : font,
       color: rgb(0.12, 0.12, 0.12),
     });
-    y -= 11.5;
-    if (y < 40) break;
+    y1 -= 7.3;
+  }
+
+  let y2 = 760;
+  for (const line of col2Lines) {
+    const isCrew = line.startsWith('Crew ');
+    page.drawText(line, {
+      x: 310,
+      y: y2,
+      size: isCrew ? 7.5 : 6,
+      font: isCrew ? boldFont : font,
+      color: rgb(0.12, 0.12, 0.12),
+    });
+    y2 -= 7.3;
   }
 
   const pdfBytes = await pdfDoc.save();
   fs.writeFileSync(path.join(publicDir, 'rsmeans_page1.pdf'), pdfBytes);
-  console.log(`Generated public/rsmeans_page1.pdf (${pdfBytes.length} bytes)`);
+  fs.writeFileSync(path.join(publicDir, 'rsmeans_crews_sample.pdf'), pdfBytes);
+  console.log(`Generated public/rsmeans_page1.pdf and public/rsmeans_crews_sample.pdf (${pdfBytes.length} bytes)`);
 }
 
 main();

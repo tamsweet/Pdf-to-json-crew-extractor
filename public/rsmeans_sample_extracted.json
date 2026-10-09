@@ -5,17 +5,14 @@
       {
         "description": "1 Building Laborer",
         "bareCosts": {
-          "hourly": 39.85,
-          "daily": 318.8
+          "hourly": 0,
+          "daily": 0
         },
         "indSubsOP": {
-          "hourly": 60.7,
-          "daily": 485.6
+          "hourly": 0,
+          "daily": 0
         },
-        "costPerLaborHour": {
-          "bare": 39.85,
-          "inclOP": 60.7
-        }
+        "costPerLaborHour": null
       },
       {
         "description": "1 Concrete Saw, Gas Manual",
@@ -27,24 +24,21 @@
           "hourly": 0,
           "daily": 78.32
         },
-        "costPerLaborHour": {
-          "bare": 8.9,
-          "inclOP": 9.79
-        }
+        "costPerLaborHour": null
       }
     ],
     "dailyTotals": {
       "bareCosts": {
         "hourly": 0,
-        "daily": 390
+        "daily": 8
       },
       "indSubsOP": {
         "hourly": 0,
-        "daily": 563.92
+        "daily": 390
       },
       "costPerLaborHour": {
-        "bare": 48.75,
-        "inclOP": 70.49
+        "bare": 563.92,
+        "inclOP": 0
       }
     }
   },
@@ -54,46 +48,40 @@
       {
         "description": "1 Skilled Worker",
         "bareCosts": {
-          "hourly": 52.35,
-          "daily": 418.8
+          "hourly": 0,
+          "daily": 0
         },
         "indSubsOP": {
-          "hourly": 80.15,
-          "daily": 641.2
+          "hourly": 0,
+          "daily": 0
         },
-        "costPerLaborHour": {
-          "bare": 52.35,
-          "inclOP": 80.15
-        }
+        "costPerLaborHour": null
       },
       {
         "description": "1 Shot Blaster, 20\"",
         "bareCosts": {
           "hourly": 0,
-          "daily": 214.8
+          "daily": 0
         },
         "indSubsOP": {
           "hourly": 0,
-          "daily": 236.28
+          "daily": 0
         },
-        "costPerLaborHour": {
-          "bare": 26.85,
-          "inclOP": 29.54
-        }
+        "costPerLaborHour": null
       }
     ],
     "dailyTotals": {
       "bareCosts": {
         "hourly": 0,
-        "daily": 633.6
+        "daily": 8
       },
       "indSubsOP": {
         "hourly": 0,
-        "daily": 877.48
+        "daily": 633.6
       },
       "costPerLaborHour": {
-        "bare": 79.2,
-        "inclOP": 109.69
+        "bare": 877.48,
+        "inclOP": 0
       }
     }
   },
@@ -103,17 +91,14 @@
       {
         "description": "1 Building Laborer",
         "bareCosts": {
-          "hourly": 39.85,
-          "daily": 318.8
+          "hourly": 0,
+          "daily": 0
         },
         "indSubsOP": {
-          "hourly": 60.7,
-          "daily": 485.6
+          "hourly": 0,
+          "daily": 0
         },
-        "costPerLaborHour": {
-          "bare": 39.85,
-          "inclOP": 60.7
-        }
+        "costPerLaborHour": null
       },
       {
         "description": "1 Concrete Saw",
@@ -134,15 +119,15 @@
     "dailyTotals": {
       "bareCosts": {
         "hourly": 0,
-        "daily": 421.2
+        "daily": 8
       },
       "indSubsOP": {
         "hourly": 0,
-        "daily": 598.24
+        "daily": 421.2
       },
       "costPerLaborHour": {
-        "bare": 52.65,
-        "inclOP": 74.78
+        "bare": 598.24,
+        "inclOP": 0
       }
     }
   },
@@ -152,46 +137,40 @@
       {
         "description": "1 Building Laborer",
         "bareCosts": {
-          "hourly": 39.85,
-          "daily": 318.8
+          "hourly": 0,
+          "daily": 0
         },
         "indSubsOP": {
-          "hourly": 60.7,
-          "daily": 485.6
+          "hourly": 0,
+          "daily": 0
         },
-        "costPerLaborHour": {
-          "bare": 39.85,
-          "inclOP": 60.7
-        }
+        "costPerLaborHour": null
       },
       {
         "description": "1 Chain Saw, Gas, 18\"",
         "bareCosts": {
           "hourly": 0,
-          "daily": 27.8
+          "daily": 0
         },
         "indSubsOP": {
           "hourly": 0,
-          "daily": 30.58
+          "daily": 0
         },
-        "costPerLaborHour": {
-          "bare": 3.48,
-          "inclOP": 3.82
-        }
+        "costPerLaborHour": null
       }
     ],
     "dailyTotals": {
       "bareCosts": {
         "hourly": 0,
-        "daily": 346.6
+        "daily": 8
       },
       "indSubsOP": {
         "hourly": 0,
-        "daily": 516.18
+        "daily": 346.6
       },
       "costPerLaborHour": {
-        "bare": 43.33,
-        "inclOP": 64.52
+        "bare": 516.18,
+        "inclOP": 0
       }
     }
   },
@@ -201,17 +180,14 @@
       {
         "description": "1 Building Laborer",
         "bareCosts": {
-          "hourly": 39.85,
-          "daily": 318.8
+          "hourly": 0,
+          "daily": 0
         },
         "indSubsOP": {
-          "hourly": 60.7,
-          "daily": 485.6
+          "hourly": 0,
+          "daily": 0
         },
-        "costPerLaborHour": {
-          "bare": 39.85,
-          "inclOP": 60.7
-        }
+        "costPerLaborHour": null
       },
       {
         "description": "1 Vibrating Plate, Gas, 18\"",
@@ -223,24 +199,21 @@
           "hourly": 0,
           "daily": 34.98
         },
-        "costPerLaborHour": {
-          "bare": 3.98,
-          "inclOP": 4.37
-        }
+        "costPerLaborHour": null
       }
     ],
     "dailyTotals": {
       "bareCosts": {
         "hourly": 0,
-        "daily": 350.6
+        "daily": 8
       },
       "indSubsOP": {
         "hourly": 0,
-        "daily": 520.58
+        "daily": 350.6
       },
       "costPerLaborHour": {
-        "bare": 43.83,
-        "inclOP": 65.07
+        "bare": 520.58,
+        "inclOP": 0
       }
     }
   },
@@ -250,17 +223,14 @@
       {
         "description": "1 Building Laborer",
         "bareCosts": {
-          "hourly": 39.85,
-          "daily": 318.8
+          "hourly": 0,
+          "daily": 0
         },
         "indSubsOP": {
-          "hourly": 60.7,
-          "daily": 485.6
+          "hourly": 0,
+          "daily": 0
         },
-        "costPerLaborHour": {
-          "bare": 39.85,
-          "inclOP": 60.7
-        }
+        "costPerLaborHour": null
       },
       {
         "description": "1 Vibrating Plate, Gas, 21\"",
@@ -272,24 +242,21 @@
           "hourly": 0,
           "daily": 44.66
         },
-        "costPerLaborHour": {
-          "bare": 5.08,
-          "inclOP": 5.58
-        }
+        "costPerLaborHour": null
       }
     ],
     "dailyTotals": {
       "bareCosts": {
         "hourly": 0,
-        "daily": 359.4
+        "daily": 8
       },
       "indSubsOP": {
         "hourly": 0,
-        "daily": 530.26
+        "daily": 359.4
       },
       "costPerLaborHour": {
-        "bare": 44.92,
-        "inclOP": 66.28
+        "bare": 530.26,
+        "inclOP": 0
       }
     }
   },
@@ -299,17 +266,14 @@
       {
         "description": "1 Building Laborer",
         "bareCosts": {
-          "hourly": 39.85,
-          "daily": 318.8
+          "hourly": 0,
+          "daily": 0
         },
         "indSubsOP": {
-          "hourly": 60.7,
-          "daily": 485.6
+          "hourly": 0,
+          "daily": 0
         },
-        "costPerLaborHour": {
-          "bare": 39.85,
-          "inclOP": 60.7
-        }
+        "costPerLaborHour": null
       },
       {
         "description": "1 Rammer/Tamper, Gas, 8\"",
@@ -321,24 +285,21 @@
           "hourly": 0,
           "daily": 50.6
         },
-        "costPerLaborHour": {
-          "bare": 5.75,
-          "inclOP": 6.33
-        }
+        "costPerLaborHour": null
       }
     ],
     "dailyTotals": {
       "bareCosts": {
         "hourly": 0,
-        "daily": 364.8
+        "daily": 8
       },
       "indSubsOP": {
         "hourly": 0,
-        "daily": 536.2
+        "daily": 364.8
       },
       "costPerLaborHour": {
-        "bare": 45.6,
-        "inclOP": 67.03
+        "bare": 536.2,
+        "inclOP": 0
       }
     }
   },
@@ -348,17 +309,14 @@
       {
         "description": "1 Building Laborer",
         "bareCosts": {
-          "hourly": 39.85,
-          "daily": 318.8
+          "hourly": 0,
+          "daily": 0
         },
         "indSubsOP": {
-          "hourly": 60.7,
-          "daily": 485.6
+          "hourly": 0,
+          "daily": 0
         },
-        "costPerLaborHour": {
-          "bare": 39.85,
-          "inclOP": 60.7
-        }
+        "costPerLaborHour": null
       },
       {
         "description": "1 Rammer/Tamper, Gas, 15\"",
@@ -370,24 +328,21 @@
           "hourly": 0,
           "daily": 57.2
         },
-        "costPerLaborHour": {
-          "bare": 6.5,
-          "inclOP": 7.15
-        }
+        "costPerLaborHour": null
       }
     ],
     "dailyTotals": {
       "bareCosts": {
         "hourly": 0,
-        "daily": 370.8
+        "daily": 8
       },
       "indSubsOP": {
         "hourly": 0,
-        "daily": 542.8
+        "daily": 370.8
       },
       "costPerLaborHour": {
-        "bare": 46.35,
-        "inclOP": 67.85
+        "bare": 542.8,
+        "inclOP": 0
       }
     }
   },
@@ -397,17 +352,14 @@
       {
         "description": "1 Building Laborer",
         "bareCosts": {
-          "hourly": 39.85,
-          "daily": 318.8
+          "hourly": 0,
+          "daily": 0
         },
         "indSubsOP": {
-          "hourly": 60.7,
-          "daily": 485.6
+          "hourly": 0,
+          "daily": 0
         },
-        "costPerLaborHour": {
-          "bare": 39.85,
-          "inclOP": 60.7
-        }
+        "costPerLaborHour": null
       },
       {
         "description": "1 Exterior Steam Cleaner",
@@ -419,24 +371,21 @@
           "hourly": 0,
           "daily": 82.28
         },
-        "costPerLaborHour": {
-          "bare": 9.35,
-          "inclOP": 10.29
-        }
+        "costPerLaborHour": null
       }
     ],
     "dailyTotals": {
       "bareCosts": {
         "hourly": 0,
-        "daily": 393.6
+        "daily": 8
       },
       "indSubsOP": {
         "hourly": 0,
-        "daily": 567.88
+        "daily": 393.6
       },
       "costPerLaborHour": {
-        "bare": 49.2,
-        "inclOP": 70.98
+        "bare": 567.88,
+        "inclOP": 0
       }
     }
   },
@@ -446,17 +395,14 @@
       {
         "description": "1 Building Laborer",
         "bareCosts": {
-          "hourly": 39.85,
-          "daily": 318.8
+          "hourly": 0,
+          "daily": 0
         },
         "indSubsOP": {
-          "hourly": 60.7,
-          "daily": 485.6
+          "hourly": 0,
+          "daily": 0
         },
-        "costPerLaborHour": {
-          "bare": 39.85,
-          "inclOP": 60.7
-        }
+        "costPerLaborHour": null
       },
       {
         "description": "1 Cultivator, Walk-Behind, 5 H.P.",
@@ -466,26 +412,23 @@
         },
         "indSubsOP": {
           "hourly": 0,
-          "daily": 69.85
+          "daily": 0
         },
-        "costPerLaborHour": {
-          "bare": 7.94,
-          "inclOP": 8.73
-        }
+        "costPerLaborHour": null
       }
     ],
     "dailyTotals": {
       "bareCosts": {
         "hourly": 0,
-        "daily": 382.3
+        "daily": 8
       },
       "indSubsOP": {
         "hourly": 0,
-        "daily": 555.45
+        "daily": 382.3
       },
       "costPerLaborHour": {
-        "bare": 47.79,
-        "inclOP": 69.43
+        "bare": 555.45,
+        "inclOP": 0
       }
     }
   },
@@ -495,17 +438,14 @@
       {
         "description": "1 Building Laborer",
         "bareCosts": {
-          "hourly": 39.85,
-          "daily": 318.8
+          "hourly": 0,
+          "daily": 0
         },
         "indSubsOP": {
-          "hourly": 60.7,
-          "daily": 485.6
+          "hourly": 0,
+          "daily": 0
         },
-        "costPerLaborHour": {
-          "bare": 39.85,
-          "inclOP": 60.7
-        }
+        "costPerLaborHour": null
       },
       {
         "description": "1 Cultivator, Walk-Behind, 8 H.P.",
@@ -515,26 +455,23 @@
         },
         "indSubsOP": {
           "hourly": 0,
-          "daily": 82.06
+          "daily": 0
         },
-        "costPerLaborHour": {
-          "bare": 9.32,
-          "inclOP": 10.26
-        }
+        "costPerLaborHour": null
       }
     ],
     "dailyTotals": {
       "bareCosts": {
         "hourly": 0,
-        "daily": 393.4
+        "daily": 8
       },
       "indSubsOP": {
         "hourly": 0,
-        "daily": 567.66
+        "daily": 393.4
       },
       "costPerLaborHour": {
-        "bare": 49.17,
-        "inclOP": 70.96
+        "bare": 567.66,
+        "inclOP": 0
       }
     }
   },
@@ -544,17 +481,14 @@
       {
         "description": "1 Building Laborer",
         "bareCosts": {
-          "hourly": 39.85,
-          "daily": 318.8
+          "hourly": 0,
+          "daily": 0
         },
         "indSubsOP": {
-          "hourly": 60.7,
-          "daily": 485.6
+          "hourly": 0,
+          "daily": 0
         },
-        "costPerLaborHour": {
-          "bare": 39.85,
-          "inclOP": 60.7
-        }
+        "costPerLaborHour": null
       },
       {
         "description": "1 Snow Blower, Walk-Behind",
@@ -566,24 +500,21 @@
           "hourly": 0,
           "daily": 77.11
         },
-        "costPerLaborHour": {
-          "bare": 8.76,
-          "inclOP": 9.64
-        }
+        "costPerLaborHour": null
       }
     ],
     "dailyTotals": {
       "bareCosts": {
         "hourly": 0,
-        "daily": 388.9
+        "daily": 8
       },
       "indSubsOP": {
         "hourly": 0,
-        "daily": 562.71
+        "daily": 388.9
       },
       "costPerLaborHour": {
-        "bare": 48.61,
-        "inclOP": 70.34
+        "bare": 562.71,
+        "inclOP": 0
       }
     }
   },
@@ -600,20 +531,17 @@
           "hourly": 60.7,
           "daily": 971.2
         },
-        "costPerLaborHour": {
-          "bare": 41.4,
-          "inclOP": 62.8
-        }
+        "costPerLaborHour": null
       },
       {
         "description": "1 Truck Driver (light)",
         "bareCosts": {
-          "hourly": 44.5,
-          "daily": 356
+          "hourly": 0,
+          "daily": 44.5
         },
         "indSubsOP": {
-          "hourly": 67,
-          "daily": 536
+          "hourly": 0,
+          "daily": 356
         },
         "costPerLaborHour": null
       },
@@ -625,26 +553,23 @@
         },
         "indSubsOP": {
           "hourly": 0,
-          "daily": 207.24
+          "daily": 0
         },
-        "costPerLaborHour": {
-          "bare": 7.85,
-          "inclOP": 8.63
-        }
+        "costPerLaborHour": null
       }
     ],
     "dailyTotals": {
       "bareCosts": {
         "hourly": 0,
-        "daily": 1182
+        "daily": 24
       },
       "indSubsOP": {
         "hourly": 0,
-        "daily": 1714.44
+        "daily": 1182
       },
       "costPerLaborHour": {
-        "bare": 49.25,
-        "inclOP": 71.44
+        "bare": 1714.44,
+        "inclOP": 0
       }
     }
   },
@@ -661,20 +586,17 @@
           "hourly": 60.7,
           "daily": 971.2
         },
-        "costPerLaborHour": {
-          "bare": 41.4,
-          "inclOP": 62.8
-        }
+        "costPerLaborHour": null
       },
       {
         "description": "1 Truck Driver (light)",
         "bareCosts": {
-          "hourly": 44.5,
-          "daily": 356
+          "hourly": 0,
+          "daily": 44.5
         },
         "indSubsOP": {
-          "hourly": 67,
-          "daily": 536
+          "hourly": 0,
+          "daily": 356
         },
         "costPerLaborHour": null
       },
@@ -686,7 +608,7 @@
         },
         "indSubsOP": {
           "hourly": 0,
-          "daily": 207.24
+          "daily": 0
         },
         "costPerLaborHour": null
       },
@@ -709,15 +631,15 @@
     "dailyTotals": {
       "bareCosts": {
         "hourly": 0,
-        "daily": 1284.4
+        "daily": 24
       },
       "indSubsOP": {
         "hourly": 0,
-        "daily": 1827.08
+        "daily": 1284.4
       },
       "costPerLaborHour": {
-        "bare": 53.52,
-        "inclOP": 76.13
+        "bare": 1827.08,
+        "inclOP": 0
       }
     }
   },
@@ -727,17 +649,14 @@
       {
         "description": "1 Truck Driver (light)",
         "bareCosts": {
-          "hourly": 44.5,
-          "daily": 356
+          "hourly": 0,
+          "daily": 44.5
         },
         "indSubsOP": {
-          "hourly": 67,
-          "daily": 536
+          "hourly": 0,
+          "daily": 356
         },
-        "costPerLaborHour": {
-          "bare": 44.5,
-          "inclOP": 67
-        }
+        "costPerLaborHour": null
       },
       {
         "description": "1 Flatbed Truck, Gas, 1.5 Ton",
@@ -747,26 +666,23 @@
         },
         "indSubsOP": {
           "hourly": 0,
-          "daily": 207.24
+          "daily": 0
         },
-        "costPerLaborHour": {
-          "bare": 23.55,
-          "inclOP": 25.91
-        }
+        "costPerLaborHour": null
       }
     ],
     "dailyTotals": {
       "bareCosts": {
         "hourly": 0,
-        "daily": 544.4
+        "daily": 8
       },
       "indSubsOP": {
         "hourly": 0,
-        "daily": 743.24
+        "daily": 544.4
       },
       "costPerLaborHour": {
-        "bare": 68.05,
-        "inclOP": 92.91
+        "bare": 743.24,
+        "inclOP": 0
       }
     }
   },
@@ -776,17 +692,14 @@
       {
         "description": "1 Equip. Oper. (light)",
         "bareCosts": {
-          "hourly": 51.3,
-          "daily": 410.4
+          "hourly": 0,
+          "daily": 51.3
         },
         "indSubsOP": {
-          "hourly": 77.35,
-          "daily": 618.8
+          "hourly": 0,
+          "daily": 410.4
         },
-        "costPerLaborHour": {
-          "bare": 51.3,
-          "inclOP": 77.35
-        }
+        "costPerLaborHour": null
       },
       {
         "description": "1 Pickup Truck, 4x4, 3/4 Ton",
@@ -796,26 +709,23 @@
         },
         "indSubsOP": {
           "hourly": 0,
-          "daily": 139.26
+          "daily": 0
         },
-        "costPerLaborHour": {
-          "bare": 15.82,
-          "inclOP": 17.41
-        }
+        "costPerLaborHour": null
       }
     ],
     "dailyTotals": {
       "bareCosts": {
         "hourly": 0,
-        "daily": 537
+        "daily": 8
       },
       "indSubsOP": {
         "hourly": 0,
-        "daily": 758.06
+        "daily": 537
       },
       "costPerLaborHour": {
-        "bare": 67.13,
-        "inclOP": 94.76
+        "bare": 758.06,
+        "inclOP": 0
       }
     }
   },
@@ -825,27 +735,24 @@
       {
         "description": "1 Equip. Oper. (medium)",
         "bareCosts": {
-          "hourly": 53.75,
-          "daily": 430
+          "hourly": 0,
+          "daily": 53.75
         },
         "indSubsOP": {
-          "hourly": 81.05,
-          "daily": 648.4
+          "hourly": 0,
+          "daily": 430
         },
-        "costPerLaborHour": {
-          "bare": 49.88,
-          "inclOP": 75.17
-        }
+        "costPerLaborHour": null
       },
       {
         "description": "1 Truck Driver (heavy)",
         "bareCosts": {
-          "hourly": 46,
-          "daily": 368
+          "hourly": 0,
+          "daily": 46
         },
         "indSubsOP": {
-          "hourly": 69.3,
-          "daily": 554.4
+          "hourly": 0,
+          "daily": 368
         },
         "costPerLaborHour": null
       },
@@ -857,7 +764,7 @@
         },
         "indSubsOP": {
           "hourly": 0,
-          "daily": 597.08
+          "daily": 0
         },
         "costPerLaborHour": null
       },
@@ -869,26 +776,23 @@
         },
         "indSubsOP": {
           "hourly": 0,
-          "daily": 575.52
+          "daily": 0
         },
-        "costPerLaborHour": {
-          "bare": 66.63,
-          "inclOP": 73.29
-        }
+        "costPerLaborHour": null
       }
     ],
     "dailyTotals": {
       "bareCosts": {
         "hourly": 0,
-        "daily": 1864
+        "daily": 16
       },
       "indSubsOP": {
         "hourly": 0,
-        "daily": 2375.4
+        "daily": 1864
       },
       "costPerLaborHour": {
-        "bare": 116.5,
-        "inclOP": 148.46
+        "bare": 2375.4,
+        "inclOP": 0
       }
     }
   },
@@ -898,17 +802,14 @@
       {
         "description": "1 Equip. Oper. (light)",
         "bareCosts": {
-          "hourly": 51.3,
-          "daily": 410.4
+          "hourly": 0,
+          "daily": 51.3
         },
         "indSubsOP": {
-          "hourly": 77.35,
-          "daily": 618.8
+          "hourly": 0,
+          "daily": 410.4
         },
-        "costPerLaborHour": {
-          "bare": 51.3,
-          "inclOP": 77.35
-        }
+        "costPerLaborHour": null
       },
       {
         "description": "1 Loader, Skid Steer, 78 H.P.",
@@ -918,26 +819,23 @@
         },
         "indSubsOP": {
           "hourly": 0,
-          "daily": 401.28
+          "daily": 0
         },
-        "costPerLaborHour": {
-          "bare": 45.6,
-          "inclOP": 50.16
-        }
+        "costPerLaborHour": null
       }
     ],
     "dailyTotals": {
       "bareCosts": {
         "hourly": 0,
-        "daily": 775.2
+        "daily": 8
       },
       "indSubsOP": {
         "hourly": 0,
-        "daily": 1020.08
+        "daily": 775.2
       },
       "costPerLaborHour": {
-        "bare": 96.9,
-        "inclOP": 127.51
+        "bare": 1020.08,
+        "inclOP": 0
       }
     }
   },
@@ -947,17 +845,14 @@
       {
         "description": "1 Truck Driver (light)",
         "bareCosts": {
-          "hourly": 44.5,
-          "daily": 356
+          "hourly": 0,
+          "daily": 44.5
         },
         "indSubsOP": {
-          "hourly": 67,
-          "daily": 536
+          "hourly": 0,
+          "daily": 356
         },
-        "costPerLaborHour": {
-          "bare": 44.5,
-          "inclOP": 67
-        }
+        "costPerLaborHour": null
       },
       {
         "description": "1 Pickup Truck, 4x4, 3/4 Ton",
@@ -967,7 +862,7 @@
         },
         "indSubsOP": {
           "hourly": 0,
-          "daily": 139.26
+          "daily": 0
         },
         "costPerLaborHour": null
       },
@@ -981,24 +876,21 @@
           "hourly": 0,
           "daily": 146.3
         },
-        "costPerLaborHour": {
-          "bare": 32.45,
-          "inclOP": 35.7
-        }
+        "costPerLaborHour": null
       }
     ],
     "dailyTotals": {
       "bareCosts": {
         "hourly": 0,
-        "daily": 615.6
+        "daily": 8
       },
       "indSubsOP": {
         "hourly": 0,
-        "daily": 821.56
+        "daily": 615.6
       },
       "costPerLaborHour": {
-        "bare": 76.95,
-        "inclOP": 102.69
+        "bare": 821.56,
+        "inclOP": 0
       }
     }
   },
@@ -1008,27 +900,24 @@
       {
         "description": "1 Equip. Oper. (crane)",
         "bareCosts": {
-          "hourly": 56.1,
-          "daily": 448.8
+          "hourly": 0,
+          "daily": 56.1
         },
         "indSubsOP": {
-          "hourly": 84.6,
-          "daily": 676.8
+          "hourly": 0,
+          "daily": 448.8
         },
-        "costPerLaborHour": {
-          "bare": 51.05,
-          "inclOP": 76.95
-        }
+        "costPerLaborHour": null
       },
       {
         "description": "1 Truck Driver (heavy)",
         "bareCosts": {
-          "hourly": 46,
-          "daily": 368
+          "hourly": 0,
+          "daily": 46
         },
         "indSubsOP": {
-          "hourly": 69.3,
-          "daily": 554.4
+          "hourly": 0,
+          "daily": 368
         },
         "costPerLaborHour": null
       },
@@ -1040,26 +929,23 @@
         },
         "indSubsOP": {
           "hourly": 0,
-          "daily": 139.26
+          "daily": 0
         },
-        "costPerLaborHour": {
-          "bare": 7.91,
-          "inclOP": 8.7
-        }
+        "costPerLaborHour": null
       }
     ],
     "dailyTotals": {
       "bareCosts": {
         "hourly": 0,
-        "daily": 943.4
+        "daily": 16
       },
       "indSubsOP": {
         "hourly": 0,
-        "daily": 1370.46
+        "daily": 943.4
       },
       "costPerLaborHour": {
-        "bare": 58.96,
-        "inclOP": 85.65
+        "bare": 1370.46,
+        "inclOP": 0
       }
     }
   },
@@ -1069,27 +955,24 @@
       {
         "description": "1 Equip. Oper. (crane)",
         "bareCosts": {
-          "hourly": 56.1,
-          "daily": 448.8
+          "hourly": 0,
+          "daily": 56.1
         },
         "indSubsOP": {
-          "hourly": 84.6,
-          "daily": 676.8
+          "hourly": 0,
+          "daily": 448.8
         },
-        "costPerLaborHour": {
-          "bare": 51.05,
-          "inclOP": 76.95
-        }
+        "costPerLaborHour": null
       },
       {
         "description": "1 Truck Driver (heavy)",
         "bareCosts": {
-          "hourly": 46,
-          "daily": 368
+          "hourly": 0,
+          "daily": 46
         },
         "indSubsOP": {
-          "hourly": 69.3,
-          "daily": 554.4
+          "hourly": 0,
+          "daily": 368
         },
         "costPerLaborHour": null
       },
@@ -1101,7 +984,7 @@
         },
         "indSubsOP": {
           "hourly": 0,
-          "daily": 139.26
+          "daily": 0
         },
         "costPerLaborHour": null
       },
@@ -1113,7 +996,7 @@
         },
         "indSubsOP": {
           "hourly": 0,
-          "daily": 523.82
+          "daily": 0
         },
         "costPerLaborHour": null
       },
@@ -1127,24 +1010,21 @@
           "hourly": 0,
           "daily": 274.34
         },
-        "costPerLaborHour": {
-          "bare": 53.26,
-          "inclOP": 58.59
-        }
+        "costPerLaborHour": null
       }
     ],
     "dailyTotals": {
       "bareCosts": {
         "hourly": 0,
-        "daily": 1669
+        "daily": 16
       },
       "indSubsOP": {
         "hourly": 0,
-        "daily": 2168.62
+        "daily": 1669
       },
       "costPerLaborHour": {
-        "bare": 104.31,
-        "inclOP": 135.54
+        "bare": 2168.62,
+        "inclOP": 0
       }
     }
   }

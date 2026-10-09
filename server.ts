@@ -2,7 +2,7 @@ import express from 'express';
 import multer from 'multer';
 import path from 'path';
 import fs from 'fs';
-import { execFileSync, execFile } from 'child_process';
+import { execFileSync } from 'child_process';
 import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -25,18 +25,275 @@ app.use((req, res, next) => {
   next();
 });
 
+const uploadDir = '/tmp/crew_uploads';
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir, { recursive: true });
+}
+
 const upload = multer({
-  dest: '/tmp/crew_uploads/',
+  dest: uploadDir,
   limits: { fileSize: 50 * 1024 * 1024 }, // 50MB
 });
 
 const ZIG_BIN_PATH = path.resolve(__dirname, 'backend/zig-out/bin/crew-extractor');
 
+// Ensure execute permissions on Zig binary if present
+if (fs.existsSync(ZIG_BIN_PATH)) {
+  try {
+    fs.chmodSync(ZIG_BIN_PATH, 0o755);
+  } catch (err: any) {
+    console.warn('Could not set execute permissions on Zig binary:', err.message);
+  }
+}
+
+// Extract text layout from PDF using Node.js pdf-parse
+async function extractTextFromPdf(pdfPath: string): Promise<string> {
+  const { PDFParse } = await import('pdf-parse');
+  const buffer = fs.readFileSync(pdfPath);
+  const parser = new PDFParse({ data: buffer });
+  const res = await parser.getText();
+  return res.text || '';
+}
+
+// Fallback TypeScript parser mirroring Zig parser logic
+interface CostPair {
+  hourly: number;
+  daily: number;
+}
+interface LaborCostPair {
+  bare: number;
+  inclOP: number;
+}
+interface LineItem {
+  description: string;
+  bareCosts: CostPair;
+  indSubsOP: CostPair;
+  costPerLaborHour?: LaborCostPair | null;
+}
+interface DailyTotals {
+  bareCosts: CostPair;
+  indSubsOP: CostPair;
+  costPerLaborHour: LaborCostPair;
+}
+interface CrewData {
+  crewId: string;
+  lineItems: LineItem[];
+  dailyTotals: DailyTotals;
+}
+
+function parseNum(raw: string): number | null {
+  const cleaned = raw.replace(/[\$,\s;]/g, '');
+  if (!cleaned) return null;
+  const val = parseFloat(cleaned);
+  return isNaN(val) ? null : val;
+}
+
+function isNumericToken(raw: string): boolean {
+  const cleaned = raw.replace(/[\$,\s;]/g, '');
+  if (!cleaned) return false;
+  return !isNaN(parseFloat(cleaned)) && /\d/.test(cleaned);
+}
+
+function parseCrewsFromText(input: string): CrewData[] {
+  const lines = input.split(/\r?\n/);
+  const crews: CrewData[] = [];
+  let currentCrewId: string | null = null;
+  let currentItems: LineItem[] = [];
+  let currentTotals: DailyTotals = {
+    bareCosts: { hourly: 0, daily: 0 },
+    indSubsOP: { hourly: 0, daily: 0 },
+    costPerLaborHour: { bare: 0, inclOP: 0 },
+  };
+
+  const isTableSubHeader = (line: string): boolean => {
+    const l = line.trim();
+    if (l === 'Hr. Daily Hr. Daily') return true;
+    if (l === 'Bare Costs' || l === 'Incl. Subs O&P' || l === 'Cost Per Labor-Hour') return true;
+    if (l === 'Bare' || l === 'Costs' || l === 'Incl.' || l === 'O&P') return true;
+    if (l.includes('Crews - Standard')) return true;
+    if (l.startsWith('Crew No.') || l.startsWith('Crew No') || l.startsWith('Crew Number')) return true;
+    if (l.includes('Bare Costs') && l.includes('Incl.')) return true;
+    return false;
+  };
+
+  for (const rawLine of lines) {
+    const line = rawLine.trim();
+    if (!line) continue;
+    if (line.includes('customer support') || line.includes('800.448.8182') || line.includes('RSMeans')) {
+      continue;
+    }
+    if (isTableSubHeader(line)) continue;
+
+    // Crew Header detection
+    if (line.startsWith('Crew ') && !line.startsWith('Crew No') && !line.startsWith('Crew Number')) {
+      if (currentCrewId && currentItems.length > 0) {
+        crews.push({
+          crewId: currentCrewId,
+          lineItems: [...currentItems],
+          dailyTotals: { ...currentTotals },
+        });
+        currentItems = [];
+        currentTotals = {
+          bareCosts: { hourly: 0, daily: 0 },
+          indSubsOP: { hourly: 0, daily: 0 },
+          costPerLaborHour: { bare: 0, inclOP: 0 },
+        };
+      }
+      const parts = line.split(/\s+/);
+      const id = parts[1] ? parts[1].replace(/[:,;]/g, '') : 'Unknown';
+      currentCrewId = `Crew ${id}`;
+      continue;
+    }
+
+    if (currentCrewId) {
+      if (line.includes('Daily Totals') || line.includes('Totals')) {
+        const numbers: number[] = [];
+        for (const tok of line.split(/\s+/)) {
+          if (isNumericToken(tok)) {
+            const val = parseNum(tok);
+            if (val !== null) numbers.push(val);
+          }
+        }
+        if (numbers.length >= 4) {
+          currentTotals.bareCosts.daily = numbers[numbers.length - 4];
+          currentTotals.indSubsOP.daily = numbers[numbers.length - 3];
+          currentTotals.costPerLaborHour.bare = numbers[numbers.length - 2];
+          currentTotals.costPerLaborHour.inclOP = numbers[numbers.length - 1];
+        } else if (numbers.length === 2) {
+          currentTotals.bareCosts.daily = numbers[0];
+          currentTotals.indSubsOP.daily = numbers[1];
+        } else if (numbers.length === 3) {
+          currentTotals.bareCosts.daily = numbers[0];
+          currentTotals.indSubsOP.daily = numbers[1];
+          currentTotals.costPerLaborHour.bare = numbers[2];
+        }
+
+        if (currentCrewId && currentItems.length > 0) {
+          crews.push({
+            crewId: currentCrewId,
+            lineItems: [...currentItems],
+            dailyTotals: { ...currentTotals },
+          });
+          currentItems = [];
+          currentTotals = {
+            bareCosts: { hourly: 0, daily: 0 },
+            indSubsOP: { hourly: 0, daily: 0 },
+            costPerLaborHour: { bare: 0, inclOP: 0 },
+          };
+          currentCrewId = null;
+        }
+        continue;
+      }
+
+      // Line item parse
+      const tokens: string[] = [];
+      for (const tok of line.split(/\s+/)) {
+        const dollarIdx = tok.indexOf('$');
+        if (dollarIdx > 0) {
+          tokens.push(tok.slice(0, dollarIdx));
+          tokens.push(tok.slice(dollarIdx));
+        } else {
+          tokens.push(tok);
+        }
+      }
+
+      if (tokens.length < 2) continue;
+
+      const numIndices: number[] = [];
+      for (let i = tokens.length - 1; i >= 0; i--) {
+        if (isNumericToken(tokens[i])) {
+          numIndices.unshift(i);
+        } else {
+          break;
+        }
+      }
+
+      if (numIndices.length === 0 || numIndices[0] === 0) continue;
+
+      const firstNumIdx = numIndices[0];
+      const description = tokens.slice(0, firstNumIdx).join(' ');
+      const numbers = numIndices.map((idx) => parseNum(tokens[idx]) ?? 0);
+
+      const item: LineItem = {
+        description,
+        bareCosts: { hourly: 0, daily: 0 },
+        indSubsOP: { hourly: 0, daily: 0 },
+        costPerLaborHour: null,
+      };
+
+      if (numbers.length >= 6) {
+        item.bareCosts.hourly = numbers[0];
+        item.bareCosts.daily = numbers[1];
+        item.indSubsOP.hourly = numbers[2];
+        item.indSubsOP.daily = numbers[3];
+        item.costPerLaborHour = { bare: numbers[4], inclOP: numbers[5] };
+      } else if (numbers.length === 5) {
+        item.bareCosts.hourly = numbers[0];
+        item.bareCosts.daily = numbers[1];
+        item.indSubsOP.hourly = numbers[2];
+        item.indSubsOP.daily = numbers[3];
+        item.costPerLaborHour = { bare: numbers[4], inclOP: 0 };
+      } else if (numbers.length === 4) {
+        const n0 = numbers[0];
+        const n1 = numbers[1];
+        if (n0 > 0 && n1 / n0 >= 7 && n1 / n0 <= 25) {
+          item.bareCosts.hourly = numbers[0];
+          item.bareCosts.daily = numbers[1];
+          item.indSubsOP.hourly = numbers[2];
+          item.indSubsOP.daily = numbers[3];
+        } else {
+          item.bareCosts.daily = numbers[0];
+          item.indSubsOP.daily = numbers[1];
+          item.costPerLaborHour = { bare: numbers[2], inclOP: numbers[3] };
+        }
+      } else if (numbers.length === 2) {
+        item.bareCosts.daily = numbers[0];
+        item.indSubsOP.daily = numbers[1];
+      } else if (numbers.length === 1) {
+        item.bareCosts.daily = numbers[0];
+      }
+
+      currentItems.push(item);
+    }
+  }
+
+  if (currentCrewId && currentItems.length > 0) {
+    crews.push({
+      crewId: currentCrewId,
+      lineItems: [...currentItems],
+      dailyTotals: { ...currentTotals },
+    });
+  }
+
+  return crews;
+}
+
+function extractLabourFromCrewsList(crews: CrewData[]): any[] {
+  const map = new Map<string, any>();
+  for (const crew of crews) {
+    for (const item of crew.lineItems) {
+      if (item.bareCosts.hourly === 0 && !item.costPerLaborHour) continue;
+      if (!map.has(item.description)) {
+        map.set(item.description, {
+          description: item.description,
+          bareCosts: { ...item.bareCosts },
+          indSubsOP: { ...item.indSubsOP },
+          costPerLaborHour: item.costPerLaborHour || {
+            bare: item.bareCosts.hourly,
+            inclOP: item.indSubsOP.hourly,
+          },
+        });
+      }
+    }
+  }
+  return Array.from(map.values());
+}
+
 // Health & Status
 app.get('/api/status', (req, res) => {
   let zigVersion = 'unknown';
-  let binaryExists = fs.existsSync(ZIG_BIN_PATH);
-  
+  const binaryExists = fs.existsSync(ZIG_BIN_PATH);
+
   if (binaryExists) {
     try {
       const out = execFileSync(ZIG_BIN_PATH, ['--version']);
@@ -82,62 +339,77 @@ app.get('/api/samples', (req, res) => {
   ]);
 });
 
-// Extraction endpoint (Zig Backend)
-app.post('/api/extract', upload.single('pdf'), async (req, res) => {
+// Extraction endpoint (Zig Backend with PDF text extraction & TS fallback)
+app.post('/api/extract', upload.single('pdf') as any, async (req: express.Request, res: express.Response) => {
   const startTime = Date.now();
   let tempFilePath: string | null = null;
-  let textInput: string | null = null;
+  let textFilePath: string | null = null;
 
   try {
+    let rawText: string | null = null;
+
     if (req.file) {
       tempFilePath = req.file.path;
-      // If filename didn't preserve .pdf extension, rename so Zig/pdftotext recognizes it
-      if (req.file.originalname.toLowerCase().endsWith('.pdf') && !tempFilePath.endsWith('.pdf')) {
-        const renamedPath = `${tempFilePath}.pdf`;
-        fs.renameSync(tempFilePath, renamedPath);
-        tempFilePath = renamedPath;
+      const isPdf =
+        req.file.originalname.toLowerCase().endsWith('.pdf') ||
+        req.file.mimetype === 'application/pdf' ||
+        (fs.existsSync(tempFilePath) && fs.readFileSync(tempFilePath, { encoding: 'latin1', flag: 'r' }).startsWith('%PDF'));
+
+      if (isPdf) {
+        // Extract layout text via PDFParse
+        rawText = await extractTextFromPdf(tempFilePath);
+        textFilePath = `${tempFilePath}.txt`;
+        fs.writeFileSync(textFilePath, rawText);
+      } else {
+        textFilePath = tempFilePath;
       }
     } else if (req.body && req.body.text) {
-      const textContent = String(req.body.text);
-      tempFilePath = `/tmp/text_upload_${Date.now()}.txt`;
-      fs.writeFileSync(tempFilePath, textContent);
+      rawText = String(req.body.text);
+      textFilePath = `/tmp/text_upload_${Date.now()}.txt`;
+      fs.writeFileSync(textFilePath, rawText);
     } else {
       return res.status(400).json({
         error: 'No file uploaded or text provided. Send a multipart/form-data request with "pdf" field or JSON with "text" field.',
       });
     }
 
-    if (!fs.existsSync(ZIG_BIN_PATH)) {
-      return res.status(500).json({
-        error: `Zig extractor binary not found at ${ZIG_BIN_PATH}. Please run "npm run build:zig" first.`,
-      });
+    let parsedJson: CrewData[] = [];
+    let engine = 'Zig 0.13.0 Native Engine';
+
+    // Attempt Zig binary execution on the prepared text file
+    if (fs.existsSync(ZIG_BIN_PATH) && textFilePath) {
+      try {
+        const stdout = execFileSync(ZIG_BIN_PATH, [textFilePath], {
+          maxBuffer: 50 * 1024 * 1024,
+          timeout: 30000,
+        });
+        const outputStr = stdout.toString().trim();
+        if (outputStr) {
+          const rawZigJson = JSON.parse(outputStr);
+          if (Array.isArray(rawZigJson)) {
+            parsedJson = rawZigJson.filter((crew: any) => {
+              if (!crew || !crew.crewId) return false;
+              const cleanId = String(crew.crewId).trim().toLowerCase();
+              if (cleanId === 'crew no.' || cleanId === 'crew no' || cleanId === 'crew number') return false;
+              if (cleanId.includes('cost per labor-hour') || cleanId.includes('bare costs')) return false;
+              return Array.isArray(crew.lineItems) && crew.lineItems.length > 0;
+            });
+          }
+        }
+      } catch (zigErr: any) {
+        console.warn('Zig binary execution encountered an issue, using TypeScript fallback:', zigErr.message);
+      }
     }
 
-    // Call Zig binary
-    const stdout = execFileSync(ZIG_BIN_PATH, [tempFilePath], {
-      maxBuffer: 50 * 1024 * 1024,
-      timeout: 30000,
-    });
-
-    const outputStr = stdout.toString().trim();
-    if (!outputStr) {
-      return res.status(500).json({ error: 'Zig parser returned empty output' });
+    // If Zig execution produced no crews or wasn't available, run TypeScript fallback parser
+    if (parsedJson.length === 0 && textFilePath) {
+      const textToParse = rawText || fs.readFileSync(textFilePath, 'utf-8');
+      parsedJson = parseCrewsFromText(textToParse);
+      engine = 'TypeScript Parser Engine';
     }
 
-    const rawJson = JSON.parse(outputStr);
-    // Sanitize: ensure no table headers like "Crew No" or items without lineItems leak into the results
-    const parsedJson = Array.isArray(rawJson)
-      ? rawJson.filter((crew: any) => {
-          if (!crew || !crew.crewId) return false;
-          const cleanId = String(crew.crewId).trim().toLowerCase();
-          if (cleanId === 'crew no.' || cleanId === 'crew no' || cleanId === 'crew number') return false;
-          if (cleanId.includes('cost per labor-hour') || cleanId.includes('bare costs')) return false;
-          return Array.isArray(crew.lineItems) && crew.lineItems.length > 0;
-        })
-      : [];
     const durationMs = Date.now() - startTime;
-
-    res.setHeader('X-Engine', 'Zig-0.13.0');
+    res.setHeader('X-Engine', engine);
     res.setHeader('X-Execution-Time-Ms', durationMs.toString());
     res.setHeader('X-Crews-Extracted', parsedJson.length.toString());
 
@@ -147,71 +419,89 @@ app.post('/api/extract', upload.single('pdf'), async (req, res) => {
     return res.status(500).json({
       error: 'Failed to extract crew data',
       message: error.message,
-      stderr: error.stderr ? error.stderr.toString() : undefined,
     });
   } finally {
     if (tempFilePath && fs.existsSync(tempFilePath)) {
       try {
         fs.unlinkSync(tempFilePath);
-      } catch (e) {
-        // ignore cleanup error
-      }
+      } catch (e) {}
+    }
+    if (textFilePath && textFilePath !== tempFilePath && fs.existsSync(textFilePath)) {
+      try {
+        fs.unlinkSync(textFilePath);
+      } catch (e) {}
     }
   }
 });
 
-// Unique Labour extraction endpoint (Zig Backend)
-app.post('/api/extract-labour', upload.single('pdf'), async (req, res) => {
+// Unique Labour extraction endpoint
+app.post('/api/extract-labour', upload.single('pdf') as any, async (req: express.Request, res: express.Response) => {
   const startTime = Date.now();
   let tempFilePath: string | null = null;
+  let textFilePath: string | null = null;
 
   try {
+    let rawText: string | null = null;
+
     if (req.file) {
       tempFilePath = req.file.path;
-      if (req.file.originalname.toLowerCase().endsWith('.pdf') && !tempFilePath.endsWith('.pdf')) {
-        const renamedPath = `${tempFilePath}.pdf`;
-        fs.renameSync(tempFilePath, renamedPath);
-        tempFilePath = renamedPath;
+      const isPdf =
+        req.file.originalname.toLowerCase().endsWith('.pdf') ||
+        req.file.mimetype === 'application/pdf' ||
+        (fs.existsSync(tempFilePath) && fs.readFileSync(tempFilePath, { encoding: 'latin1', flag: 'r' }).startsWith('%PDF'));
+
+      if (isPdf) {
+        rawText = await extractTextFromPdf(tempFilePath);
+        textFilePath = `${tempFilePath}.txt`;
+        fs.writeFileSync(textFilePath, rawText);
+      } else {
+        textFilePath = tempFilePath;
       }
     } else if (req.body && req.body.text) {
-      const textContent = String(req.body.text);
-      tempFilePath = `/tmp/text_upload_labour_${Date.now()}.txt`;
-      fs.writeFileSync(tempFilePath, textContent);
+      rawText = String(req.body.text);
+      textFilePath = `/tmp/text_upload_labour_${Date.now()}.txt`;
+      fs.writeFileSync(textFilePath, rawText);
     } else {
       return res.status(400).json({
         error: 'No file uploaded or text provided. Send a multipart/form-data request with "pdf" field or JSON with "text" field.',
       });
     }
 
-    if (!fs.existsSync(ZIG_BIN_PATH)) {
-      return res.status(500).json({
-        error: `Zig extractor binary not found at ${ZIG_BIN_PATH}. Please run "npm run build:zig" first.`,
-      });
+    let parsedJson: any[] = [];
+    let engine = 'Zig 0.13.0 Native Engine';
+
+    if (fs.existsSync(ZIG_BIN_PATH) && textFilePath) {
+      try {
+        const stdout = execFileSync(ZIG_BIN_PATH, ['--labour', textFilePath], {
+          maxBuffer: 50 * 1024 * 1024,
+          timeout: 30000,
+        });
+        const outputStr = stdout.toString().trim();
+        if (outputStr) {
+          const rawZigJson = JSON.parse(outputStr);
+          if (Array.isArray(rawZigJson)) {
+            parsedJson = rawZigJson.filter((item: any) => {
+              if (!item || !item.description) return false;
+              const d = String(item.description).trim().toLowerCase();
+              if (d.startsWith('crew no') || d.includes('bare costs') || d.includes('daily totals')) return false;
+              return true;
+            });
+          }
+        }
+      } catch (zigErr: any) {
+        console.warn('Zig binary execution encountered an issue, using TypeScript fallback:', zigErr.message);
+      }
     }
 
-    // Call Zig binary with --labour flag
-    const stdout = execFileSync(ZIG_BIN_PATH, ['--labour', tempFilePath], {
-      maxBuffer: 50 * 1024 * 1024,
-      timeout: 30000,
-    });
-
-    const outputStr = stdout.toString().trim();
-    if (!outputStr) {
-      return res.status(500).json({ error: 'Zig parser returned empty output' });
+    if (parsedJson.length === 0 && textFilePath) {
+      const textToParse = rawText || fs.readFileSync(textFilePath, 'utf-8');
+      const crews = parseCrewsFromText(textToParse);
+      parsedJson = extractLabourFromCrewsList(crews);
+      engine = 'TypeScript Parser Engine';
     }
 
-    const rawJson = JSON.parse(outputStr);
-    const parsedJson = Array.isArray(rawJson)
-      ? rawJson.filter((item: any) => {
-          if (!item || !item.description) return false;
-          const d = String(item.description).trim().toLowerCase();
-          if (d.startsWith('crew no') || d.includes('bare costs') || d.includes('daily totals')) return false;
-          return true;
-        })
-      : [];
     const durationMs = Date.now() - startTime;
-
-    res.setHeader('X-Engine', 'Zig-0.13.0');
+    res.setHeader('X-Engine', engine);
     res.setHeader('X-Execution-Time-Ms', durationMs.toString());
     res.setHeader('X-Labour-Extracted', parsedJson.length.toString());
 
@@ -221,15 +511,17 @@ app.post('/api/extract-labour', upload.single('pdf'), async (req, res) => {
     return res.status(500).json({
       error: 'Failed to extract labour data',
       message: error.message,
-      stderr: error.stderr ? error.stderr.toString() : undefined,
     });
   } finally {
     if (tempFilePath && fs.existsSync(tempFilePath)) {
       try {
         fs.unlinkSync(tempFilePath);
-      } catch (e) {
-        // ignore cleanup error
-      }
+      } catch (e) {}
+    }
+    if (textFilePath && textFilePath !== tempFilePath && fs.existsSync(textFilePath)) {
+      try {
+        fs.unlinkSync(textFilePath);
+      } catch (e) {}
     }
   }
 });
